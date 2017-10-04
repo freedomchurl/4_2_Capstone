@@ -19,6 +19,9 @@ public class Block {
 	private Block down = null;
 	// 위 블록과, 아래블록이 있을경우 여기다가 연결하기 위함이다.
 	
+	private String name = null;
+	
+	private int Data=0;
 	
 	private Color blockColor;
 	
@@ -26,8 +29,34 @@ public class Block {
 	{
 		System.out.println("Default Constructor");
 		//기본 생성자
+		
+		this.height = 100;
+		this.width = 150;
+		
+		this.blockColor = Color.BLUE;
+		
 	}
 	
+	public void setName(String input)
+	{
+		this.name = new String(input);
+		
+	}
+	
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	public void setData(int Datatype)
+	{
+		this.Data = Datatype;
+	}
+	
+	public int getData()
+	{
+		return this.Data;
+	}
 	
 	// 그외 생성자들 추가할 것.
 
