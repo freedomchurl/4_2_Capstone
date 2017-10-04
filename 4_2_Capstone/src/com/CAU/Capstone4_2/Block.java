@@ -3,6 +3,7 @@ package com.CAU.Capstone4_2;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Block extends Button{
@@ -27,7 +28,7 @@ public class Block extends Button{
 	
 	private Color blockColor;
 	
-	
+	private Image buttonImage;
 	
 	Block()
 	{
@@ -53,7 +54,7 @@ public class Block extends Button{
 	{
 		super(name); 
 		// 버튼의 글자를 위해 
-		
+		// 버튼의 이미지를 넣어야한다
 		
 		this.height = 100;
 		this.width = 150;

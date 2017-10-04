@@ -65,11 +65,8 @@ public class CapstoneMainController implements Initializable{
 		// TODO Auto-generated method stub
 		//myScene = drawCanvas.getScene();
 		
-		GraphicsContext gc = drawCanvas.getGraphicsContext2D();
-
 		Block startBlock = new Block();
-		
-		startBlock.Draw(gc);
+		myList.getResultList().add(startBlock);
 		
 		InitialArray(); // 3개의 ArrayList를 초기화 하는 작업 -> 수정 필요 
 		
