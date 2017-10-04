@@ -52,7 +52,7 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="1280.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #2E9AFE;" text="실행" textFill="WHITE">
+            <Button fx:id="RunBlock" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #2E9AFE;" text="실행" textFill="WHITE">
                <font>
                   <Font name="NanumSquare Regular" size="16.0" />
                </font>

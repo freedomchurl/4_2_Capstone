@@ -1,9 +1,11 @@
 package com.CAU.Capstone4_2;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
-public class Block {
+public class Block extends Button{
 
 	private int x_pos; 
 	private int y_pos;
@@ -25,16 +27,48 @@ public class Block {
 	
 	private Color blockColor;
 	
+	
+	
 	Block()
 	{
-		System.out.println("Default Constructor");
+		//System.out.println("Default Constructor");
 		//기본 생성자
 		
 		this.height = 100;
 		this.width = 150;
 		
+		super.setHeight(100);
+		super.setWidth(150);
+		
 		this.blockColor = Color.BLUE;
 		
+		//this.setName(name);
+		this.setPrefSize(super.getWidth(), super.getHeight());
+		this.setStyle("-fx-background-color: " + FxUtils.toRGBCode(this.blockColor) + "; -fx-text-fill: white; -fx-font-size: 50;  -fx-font-family:NanumSquare ExtraBold;"
+					+ "-fx-border-color: white;");
+		
+	}
+	
+	Block(String name,int Num, Color color)
+	{
+		super(name); 
+		// 버튼의 글자를 위해 
+		
+		
+		this.height = 100;
+		this.width = 150;
+		this.name = new String(name);
+		this.blockColor = color;
+		this.Data= Num;
+		super.setHeight(100);
+		super.setWidth(150);
+		
+		//this.blockColor = Color.BLUE;
+		System.out.println(this.name);
+		
+		this.setPrefSize(super.getWidth(), super.getHeight());
+		this.setStyle("-fx-background-color: " + FxUtils.toRGBCode(this.blockColor) + "; -fx-text-fill: white; -fx-font-size: 50;  -fx-font-family:NanumSquare ExtraBold;"
+					+ "-fx-border-color: white;");
 	}
 	
 	public void setName(String input)
@@ -70,15 +104,7 @@ public class Block {
 		this.width = width;
 	}
 	
-	public int getHeight()
-	{
-		return this.height;
-	}
 	
-	public int getWidth()
-	{
-		return this.width;
-	}
 	
 	public void setColor(Color blockcolor)
 	{
@@ -104,6 +130,11 @@ public class Block {
 		return location;
 	}
 	
+	public void Draw(GraphicsContext gc)
+	{
+		gc.setFill(this.blockColor);
+		gc.fillRect(this.x_pos, this.y_pos, this.width, this.height);
+	}
 	
 }
 

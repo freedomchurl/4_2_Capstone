@@ -7,10 +7,7 @@ public class NumberBlock extends Block{
 	
 	NumberBlock(int Num, Color color, String buttonText)
 	{
-		super();
-		this.setData(Num);
-		this.setColor(color);
-		this.setName(buttonText);
+		super(buttonText,Num,color);
 		// 색을 추가하도록 한다.
 	}
 }
