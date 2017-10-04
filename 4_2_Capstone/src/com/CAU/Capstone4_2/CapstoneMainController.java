@@ -153,14 +153,14 @@ public class CapstoneMainController implements Initializable{
 	{
 		for(int i=0;i<10;i++)
 		{
-			numBlocks.add(new NumberBlock(i,numColors[i],Integer.toString(i)));
+			numBlocks.add(new Block(Integer.toString(i),i,numColors[i]));
 			
 			// NumberBlock을 추가한다. 각각의 숫자가 들어가도록 한다.
 		}
 		
 		for(int i=0;i<10;i++)
 		{
-			controlBlocks.add(new NumberBlock(i,Color.BLUE,"▶"));
+			controlBlocks.add(new Block("▶",i,numColors[i]));
 			
 		}
 			// NormalBlock에 대한 코드.
