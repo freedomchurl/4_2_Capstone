@@ -30,6 +30,8 @@ public class Block extends Button{
 	
 	private Image buttonImage;
 	
+	private boolean hasBorder = true;
+	
 	Block()
 	{
 		//System.out.println("Default Constructor");
@@ -133,6 +135,13 @@ public class Block extends Button{
 	
 	public void Draw(GraphicsContext gc)
 	{
+		
+		if(hasBorder == true)
+		{
+			gc.setStroke(Color.BLACK);
+			gc.setLineWidth(5.0);
+			gc.strokeRect(this.x_pos, this.y_pos, this.width, this.height);
+		}
 		gc.setFill(this.blockColor);
 		gc.fillRect(this.x_pos, this.y_pos, this.width, this.height);
 	}
