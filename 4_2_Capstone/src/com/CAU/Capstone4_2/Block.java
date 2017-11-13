@@ -1,149 +1,133 @@
 package com.CAU.Capstone4_2;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
-public class Block extends Button{
+public class Block extends ImageView{
 
 	private int x_pos; 
 	private int y_pos;
 	// x, y 블록의 좌표
-	
-	private Point2D location = null;
-	
+		
 	private int height;
 	private int width;
 	// 블록의 크기
 	
-	private Block up = null;
-	private Block down = null;
-	// 위 블록과, 아래블록이 있을경우 여기다가 연결하기 위함이다.
 	
-	private String name = null;
+	private ArrayList<Block> upperList = new ArrayList<Block>();
+	private ArrayList<Block> lowList = new ArrayList<Block>();
 	
-	private int Data=0;
-	
-	private Color blockColor;
+	private String contents = null;
+	private int value=0;
 	
 	private Image buttonImage;
+	private Image buttonImage2;
 	
 	private boolean hasBorder = true;
 	
 	Block()
 	{
-		//System.out.println("Default Constructor");
-		//기본 생성자
-		
 		this.height = 100;
-		this.width = 150;
-		
-		super.setHeight(100);
-		super.setWidth(150);
-		
-		this.blockColor = Color.BLUE;
-		
-		//this.setName(name);
-		this.setPrefSize(super.getWidth(), super.getHeight());
-		this.setStyle("-fx-background-color: " + FxUtils.toRGBCode(this.blockColor) + "; -fx-text-fill: white; -fx-font-size: 50;  -fx-font-family:NanumSquare ExtraBold;"
-					+ "-fx-border-color: white;");
+		this.width = 150;		
+		super.setFitHeight(100);
+		super.setFitWidth(150);
 		
 	}
 	
-	Block(String name,int Num, Color color)
+	Block(Image input)
 	{
-		super(name); 
+		this.height = 100;
+		this.width = 150;
+		this.buttonImage = input;
+		this.setImage(buttonImage);
+	}
+	
+	Block(String name)
+	{
+		//super(name); 
 		// 버튼의 글자를 위해 
 		// 버튼의 이미지를 넣어야한다
 		
 		this.height = 100;
 		this.width = 150;
-		this.name = new String(name);
-		this.blockColor = color;
-		this.Data= Num;
-		super.setHeight(100);
-		super.setWidth(150);
-		
-		//this.blockColor = Color.BLUE;
-		System.out.println(this.name);
-		
-		this.setPrefSize(super.getWidth(), super.getHeight());
-		this.setStyle("-fx-background-color: " + FxUtils.toRGBCode(this.blockColor) + "; -fx-text-fill: white; -fx-font-size: 50;  -fx-font-family:NanumSquare ExtraBold;"
-					+ "-fx-border-color: white;");
-	}
-	
-	public void setName(String input)
-	{
-		this.name = new String(input);
+		super.setFitHeight(100);
+		super.setFitWidth(150);
 		
 	}
 	
-	public String getName()
+	Block(Block input)
 	{
-		return this.name;
+		this.x_pos = input.x_pos;
+		this.y_pos = input.y_pos;
+		this.height = input.height;
+		this.width = input.width;
+		this.contents = input.contents;
+		this.value = input.value;
+		this.buttonImage = input.buttonImage;
+		this.buttonImage2 = input.buttonImage2;
+		
+		this.hasBorder = input.hasBorder;
 	}
 	
-	public void setData(int Datatype)
+	public void setContents(String input)
 	{
-		this.Data = Datatype;
+		this.contents = new String(input);
+		
 	}
 	
-	public int getData()
+	public String getContents()
 	{
-		return this.Data;
+		return this.contents;
 	}
+	
+	public void setValue(int Datatype)
+	{
+		this.value = Datatype;
+	}
+	
+	public int getValue()
+	{
+		return this.value;
+	}
+	
+	
 	
 	// 그외 생성자들 추가할 것.
 
-	public void setHeight(int height)
-	{
-		this.height = height;
-	}
-	
-	public void setWidth(int width)
-	{
-		this.width = width;
-	}
-	
-	
-	
-	public void setColor(Color blockcolor)
-	{
-		this.blockColor = blockcolor;
-	}
-	
-	public Color getColor()
-	{
-		return this.blockColor;
-	}
-	
 	public void setLocation(int x, int y)
 	{
 		this.x_pos = x;
 		this.y_pos = y;
 		
-		this.location = new Point2D(x_pos,y_pos);
-		// 새로운 Point2D 좌표를 생성해서 넣어준다.
 	}
 	
 	public Point2D getLocation()
 	{
-		return location;
+		return new Point2D(this.x_pos,this.y_pos);
 	}
 	
 	public void Draw(GraphicsContext gc)
 	{
 		
-		if(hasBorder == true)
+		if(hasBorder == false)
 		{
 			gc.setStroke(Color.BLACK);
-			gc.setLineWidth(5.0);
+			gc.setLineWidth(1.0);
 			gc.strokeRect(this.x_pos, this.y_pos, this.width, this.height);
 		}
-		gc.setFill(this.blockColor);
-		gc.fillRect(this.x_pos, this.y_pos, this.width, this.height);
+		gc.drawImage(this.buttonImage, x_pos, y_pos, width, height);
+		
+	}
+	
+	public void Run()
+	{
+		
 	}
 	
 }

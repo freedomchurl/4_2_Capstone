@@ -22,4 +22,11 @@ public class CanvasBlockList {
 		this.blockList = input;
 	}
 	
+	public void RefreshList()
+	{
+		Block tmp = this.blockList.get(0); // Start만 가져오고
+		this.blockList = new ArrayList<Block>();
+		this.blockList.add(tmp); // 다시 start만 넣는다.
+	}
+	
 }
