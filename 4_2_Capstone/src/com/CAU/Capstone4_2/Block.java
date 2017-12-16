@@ -48,6 +48,15 @@ public class Block extends ImageView{
 		this.setImage(buttonImage);
 	}
 	
+	Block(Image input, String name)
+	{
+		this.contents = name;
+		this.height = 50;
+		this.width = 75;
+		this.buttonImage = input;
+		this.setImage(buttonImage);
+	}
+	
 	Block(String name)
 	{
 		//super(name); 

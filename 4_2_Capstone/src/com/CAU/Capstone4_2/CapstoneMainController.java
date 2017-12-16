@@ -29,6 +29,14 @@ import javafx.stage.Stage;
 
 public class CapstoneMainController implements Initializable {
 
+	// 2017 - 12 - 05 추가 사항
+	
+	// ArrayList에서 배열로 구조 변경
+	private Block[][] myBlockList = new Block[13][20];
+	// 나중에 늘려야하는게 맞지만, 우선적으로는 이렇게 넘어간다.
+	
+	
+	
 	@FXML
 	private Button initial;
 	@FXML
@@ -83,10 +91,17 @@ public class CapstoneMainController implements Initializable {
 			"num01.png", "num02.png", "num03.png", "num04.png", "num05.png", "num06.png", "num07.png", "num08.png",
 			"num09.png" };
 
-	private String[] control_path = { "loop1.png", "loop2.png", "branchdown1.png", "branchdown2.png", "branchup1.png",
-			"branchup2.png", "jump1.png", "jump2.png", "equal.png", "upper.png", "lower.png" };
+	private String[] num_label = { "가","나","다","라","0","1","2","3","4","5","6","7","8","9"};
+	
+	private String[] control_path = { "loop1.png", "loop2.png", "branchup1.png",
+			"branchup2.png", "equal.png", "divide.png","minus.png","multiply.png","plus.png","remainder.png","upper.png", "lower.png","column.png" };
 
-	private String[] normal_path = { "bulb1.png", "speaker2.png" };
+	private String[] control_label = {"loop","}","if","}","=","/","-","*","+","%",">","<",","};
+
+	
+	private String[] normal_path = { "bulb1.png", "speaker2.png","home.png" ,"average.png","max.png","min.png","random.png","sum.png" };
+	
+	private String[] normal_label = {"light","sound","home","average","max","min","random","sum"};
 
 	private String[] start_home = { "start.png", "home.png" };
 
@@ -96,14 +111,14 @@ public class CapstoneMainController implements Initializable {
 		// myScene = drawCanvas.getScene();
 		Block startBlock = null;
 		try {
-			startBlock = new Block(new Image(new FileInputStream(start_home[0])));
-			startBlock.setLocation(50, 150);
+			startBlock = new Block(new Image(new FileInputStream(start_home[0])),"start");
+			startBlock.setLocation(50, 300);
 			System.out.println("추가가안되었나");
 		} catch (Exception e) {
 			System.out.println("추가가안되었1111나");
 		}
 
-		myList.getResultList().add(startBlock);
+		this.myBlockList[6][0] = startBlock;
 		// 초기블록 설정을 위함
 
 		InitialArray(); // 3개의 ArrayList를 초기화 하는 작업 -> 수정 필요
@@ -117,10 +132,41 @@ public class CapstoneMainController implements Initializable {
 
 		SetCanvasEvent();
 		// 이건 좀 다시 짜야한다.
-		StartUIUpdate();
+		//StartUIUpdate();
+
+		UIUpdate();
 
 	}
 
+	
+	public void UIUpdate()
+	{
+		GraphicsContext gss = drawCanvas.getGraphicsContext2D();
+		gss.clearRect(0, 0, drawCanvas.getWidth(), drawCanvas.getHeight());
+		
+		for (int i = 0; i < 13; i++) {
+			//myList.getResultList().get(i).Draw(gss);
+			for(int j=0;j<20;j++)
+			{
+				//System.out.println(i + " " + j);
+				if(myBlockList[i][j]!=null)
+					myBlockList[i][j].Draw(gss);
+			}
+		}
+
+		
+		if (selected == true) {
+			SelectedObject.Draw(gss);
+
+			gss.setStroke(Color.BLACK);
+			gss.setLineWidth(2.0);
+			gss.strokeRect(Guide.getLocation().getX(), Guide.getLocation().getY(), 75, 50);
+		}
+		
+	}
+	
+	
+	/*
 	public void StartUIUpdate() {
 		UIThread = new Thread() {
 			public void run() {
@@ -134,8 +180,14 @@ public class CapstoneMainController implements Initializable {
 
 						// System.out.println("사이즈는 = " +
 						// myList.getResultList().size());
-						for (int i = 0; i < myList.getResultList().size(); i++) {
-							myList.getResultList().get(i).Draw(gss);
+						for (int i = 0; i < 7; i++) {
+							//myList.getResultList().get(i).Draw(gss);
+							for(int j=0;j<20;j++)
+							{
+								System.out.println(i + " " + j);
+								if(myBlockList[i][j]!=null)
+									myBlockList[i][j].Draw(gss);
+							}
 						}
 
 						if (selected == true) {
@@ -143,16 +195,9 @@ public class CapstoneMainController implements Initializable {
 
 							gss.setStroke(Color.BLACK);
 							gss.setLineWidth(2.0);
-							gss.strokeRect(Guide.getLocation().getX(), Guide.getLocation().getY(), 150, 100);
+							gss.strokeRect(Guide.getLocation().getX(), Guide.getLocation().getY(), 75, 50);
 						}
 					});
-
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 
 				}
 			}
@@ -160,11 +205,12 @@ public class CapstoneMainController implements Initializable {
 
 		UIThread.start();
 	}
+*/
 
 	public void SetCanvasEvent() {
 		
-		drawCanvas.setWidth(2000);
-		drawCanvas.setHeight(2000);
+		//drawCanvas.setWidth(2000);
+		//drawCanvas.setHeight(2000);
 		
 		drawCanvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
 
@@ -176,101 +222,80 @@ public class CapstoneMainController implements Initializable {
 
 				if (selected == true) // 선택되었을때만 움직일 수 있다.
 				{
-					SelectedObject.setLocation((int) event.getX() - 75, (int) event.getY() - 50);
-					// gss.fillRect(event.getX() - 75, event.getY() - 50, 150,
-					// 100);
+					SelectedObject.setLocation((int) event.getX() - 37, (int) event.getY() - 25);
+					// gss.fillRect(event.getX() - 75, event.getY() - 50, 75,
+					// 50);
 
 					// 여기서 가장 가까운 놓는 위치에 흰색 테두리를 칠해야한다.
 
-					Block tmpNear = NearestBlock(); // 가장 가까운 블록을 찾는다.
+					//Block tmpNear = NearestBlock(); // 가장 가까운 블록을 찾는다.									
+					double x = event.getX();
+					double y = event.getY();
+					
+					int col = ((int)x-50) / 75; // col은 50부터 200씩 건너뛰니까, (x-50) % 200;
+					
+					int row = (int)Math.floor((y-300) / 50) + 6; // row는 가운데 row가 3이니까, 3을 더하도록 한다.
+					
+					Guide.setLocation(col*75+50,(row-6)*50 + 300);
+					
+					
 
-					if (minindex == 0) // 그냥 지금 시작 버튼 하나만 있는 경우
-					{
-						Guide.setLocation((int) myList.getResultList().get(0).getLocation().getX() + 170,
-								(int) myList.getResultList().get(0).getLocation().getY());
-					} else {
-						if (minindex == myList.getResultList().size() - 1) // 마지막
-																			// 꺼인경우
-						{
-							// 여기에 들어가지나?
-							System.out.println("이언지빠가사리");
-							Point2D lastblock = myList.getResultList().get(minindex).getLocation();
-							Point2D rightblock_pos = new Point2D(lastblock.getX() + 170, lastblock.getY());
-							Point2D upperblock_pos = new Point2D(lastblock.getX(), lastblock.getY() - 110);
-							Point2D lowblock_pos = new Point2D(lastblock.getX(), lastblock.getY() + 110);
-
-							double rightp = SelectedObject.getLocation().distance(rightblock_pos);
-							double upperp = SelectedObject.getLocation().distance(upperblock_pos);
-							double lowp = SelectedObject.getLocation().distance(lowblock_pos);
-
-							if (rightp < upperp) {
-								if (lowp < rightp) {
-									Guide.setLocation((int) lowblock_pos.getX(), (int) lowblock_pos.getY());
-								} else if (lowp >= rightp) {
-									Guide.setLocation((int) rightblock_pos.getX(), (int) rightblock_pos.getY());
-								}
-							} else if (rightp >= upperp) {
-								if (lowp < upperp) {
-									Guide.setLocation((int) lowblock_pos.getX(), (int) lowblock_pos.getY());
-								} else {
-									Guide.setLocation((int) upperblock_pos.getX(), (int) upperblock_pos.getY());
-								}
-							}
-
-						} else {
-							double updown_dis = myList.getResultList().get(minindex).getLocation()
-									.distance(SelectedObject.getLocation());
-							double side_dis = myList.getResultList().get(myList.getResultList().size() - 1)
-									.getLocation().distance(SelectedObject.getLocation());
-
-							System.out.println("가장 가까운 인덱스는" + minindex + " side_dis = " + side_dis + ", updown_dis = "
-									+ updown_dis);
-
-							if (side_dis <= updown_dis) {
-								Guide.setLocation(
-										(int) myList.getResultList().get(myList.getResultList().size() - 1)
-												.getLocation().getX() + 170,
-										(int) myList.getResultList().get(myList.getResultList().size() - 1)
-												.getLocation().getY());
-							} else {
-								Guide.setLocation((int) myList.getResultList().get(minindex).getLocation().getX(),
-										(int) myList.getResultList().get(minindex).getLocation().getY() - 110);
-							}
-						}
-					}
-
+					UIUpdate();
 				}
 			}
 
-			public Block NearestBlock() {
-				double minDis = 9999999.0;
-				minindex = 0;
-				for (int i = 1; i < myList.getResultList().size(); i++) {
-					// 순회하면서 가장 가까운 블록을 찾는다. 블록의 위지점과 계산한다.
-
-					double tmpdis = myList.getResultList().get(i).getLocation().distance(SelectedObject.getLocation());
-					if (tmpdis < minDis) {
-						minDis = tmpdis;
-						minindex = i;
-					}
-				}
-
-				return myList.getResultList().get(minindex);
-			}
+	
 
 		});
 
+		
+		
 		drawCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
 				// TODO Auto-generated method stub
 				if (selected == true) {
+					System.out.println("내려놓는다");
 					Block tmp = new Block(SelectedObject);
 					tmp.setLocation((int) Guide.getLocation().getX(), (int) Guide.getLocation().getY());
 
-					myList.getResultList().add(tmp);
+					// 클릭되는 순간의 좌표를 바탕으로 -> 그곳의 row와 col을 알아내도록 한다.
+					double x = event.getX();
+					double y = event.getY();
+					
+					int col = ((int)x-50) / 75; // col은 50부터 200씩 건너뛰니까, (x-50) % 200;
+					
+					int row = (int)Math.floor((y-300) / 50) + 6; // row는 가운데 row가 3이니까, 3을 더하도록 한다.
+					
+					System.out.println(col + " " + row);
+					
+					myBlockList[row][col] = tmp;
+					
+					UIUpdate();
+					
+					//myList.getResultList().add(tmp);
 
+				}
+				else
+				{
+					if(event.isMetaDown())
+					{
+						System.out.println("dddd");
+						// 오른쪽 버튼일 경우
+						double x = event.getX();
+						double y = event.getY();
+						
+						int col = ((int)x-50) / 75; // col은 50부터 200씩 건너뛰니까, (x-50) % 200;
+						
+						int row = (int)Math.floor((y-300) / 50) + 6; // row는 가운데 row가 3이니까, 3을 더하도록 한다.
+						
+						System.out.println(col + " " + row);
+						
+						myBlockList[row][col] = null;
+						
+						UIUpdate();
+					}
 				}
 			}
 
@@ -289,6 +314,7 @@ public class CapstoneMainController implements Initializable {
 				if (event.getCode() == KeyCode.ESCAPE) {
 					System.out.println("타이밍을보자");
 					selected = false;
+					UIUpdate();
 				}
 			}
 		});
@@ -298,22 +324,23 @@ public class CapstoneMainController implements Initializable {
 	// 여기서 블록의 종류를 초기화해줘야 한다.
 	public void InitialArray() {
 		try {
+			System.out.println("num_path = " + num_path.length + " control_path = " + control_path.length + " normal_path = " + normal_path.length);
 			for (int i = 0; i < num_path.length; i++) {
 
-				numBlocks.add(new Block(new Image(new FileInputStream(num_path[i]))));
+				numBlocks.add(new Block(new Image(new FileInputStream(num_path[i])),num_label[i]));
 
 				// NumberBlock을 추가한다. 각각의 숫자가 들어가도록 한다.
 			}
 
 			for (int i = 0; i < control_path.length; i++) {
-				controlBlocks.add(new Block(new Image(new FileInputStream(control_path[i]))));
+				controlBlocks.add(new Block(new Image(new FileInputStream(control_path[i])),control_label[i]));
 
 			}
 			// NormalBlock에 대한 코드.
 
 			for (int i = 0; i < normal_path.length; i++) {
 				// controlBlocks.add(new
-				normalBlocks.add(new Block(new Image(new FileInputStream(normal_path[i]))));
+				normalBlocks.add(new Block(new Image(new FileInputStream(normal_path[i])),normal_label[i]));
 				// NumberBlock(i,Color.ALICEBLUE,Integer.toString(i)));
 			}
 		} catch (Exception e) {
@@ -449,7 +476,7 @@ public class CapstoneMainController implements Initializable {
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
 				InitialCanvas(event);
-				myList.RefreshList();
+				//myList.RefreshList();
 			}
 		});
 
@@ -458,7 +485,7 @@ public class CapstoneMainController implements Initializable {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-
+				CompileCanvas();
 			}
 
 		});
@@ -479,8 +506,8 @@ public class CapstoneMainController implements Initializable {
 																			// bottom,
 																			// right,
 																			// left
-			input.get(i).setFitHeight(100);
-			input.get(i).setFitWidth(150);
+			input.get(i).setFitHeight(50);
+			input.get(i).setFitWidth(75);
 			// panelButton.setPrefSize(input.get(i).getWidth(),
 			// input.get(i).getHeight());
 			// panelButton.setStyle("-fx-background-color: " +
@@ -524,7 +551,102 @@ public class CapstoneMainController implements Initializable {
 
 		// 초기화 하는 부분.
 
+		myBlockList = new Block[13][20];
+		Block startBlock = null;
+		try {
+			startBlock = new Block(new Image(new FileInputStream(start_home[0])),"start");
+			startBlock.setLocation(50, 300);
+			System.out.println("추가가안되었나");
+		} catch (Exception e) {
+			System.out.println("추가가안되었1111나");
+		}
+
+		this.myBlockList[6][0] = startBlock;
+		
+		
 		System.out.println("초기화완료");
 	}
 
+	
+	public void CompileCanvas()
+	{
+		System.out.println("Compile Start");
+		// 여기서 ArrayList로 만들어서 넘겨줄 것이다.
+		
+		String result = "";
+		
+		for(int i=0;i<20;i++)
+		{
+			if(myBlockList[6][i]!=null)
+			{
+				if(!myBlockList[6][i].getContents().equals("home"))
+					result  = result + myBlockList[6][i].getContents() + " ";
+				else
+					result = result + myBlockList[6][i].getContents();
+				
+				if(myBlockList[5][i]!=null) // null 이 아니면 위에가
+				{
+					if(myBlockList[7][i]!=null) // 아래도 있으면 문제
+					{
+						System.out.println("컴파일 오류");
+					}
+					else
+					{
+						for(int j=5;j>=0;j--)
+						{
+							if(myBlockList[j][i]!=null)
+							{
+								result = result + myBlockList[j][i].getContents() + " ";
+							}
+						}
+						
+						result = result + ": "; // if문이 끝낫다는 내용
+					}
+				}
+				
+				if(myBlockList[7][i]!=null) // null 이 아니면 위에가
+				{
+					if(myBlockList[5][i]!=null) // 아래도 있으면 문제
+					{
+						System.out.println("컴파일 오류");
+					}
+					else
+					{
+						for(int j=7;j<=12;j++)
+						{
+							if(myBlockList[j][i]!=null)
+							{
+								result = result + myBlockList[j][i].getContents() + " ";
+							}
+						}
+						
+						result = result + ": "; // if문이 끝낫다는 내용
+					}
+				}
+				
+			
+			
+			
+			}
+		}
+		
+		
+		System.out.println("결과는 = " + result);
+		System.out.println("-----------------------------------------------------------------------------\n\n");
+		
+		final String reallyresult = result;
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Compiler cm = new Compiler(reallyresult);
+			}
+			
+		}).start();
+	
+		
+	}
+	
 }
